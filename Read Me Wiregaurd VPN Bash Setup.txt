@@ -1,0 +1,76 @@
+Wiregaurd VPN Setup
+Need OS: Ubuntu 22.04 or 24.04 LTS
+
+Deploy (copy both files to the VPS)
+
+# Keep these two files in the same folder:
+#   wireguard-vpn.sh
+#   telegram_vpn_bot.py
+
+sudo bash wireguard-vpn.sh install 104.194.153.76
+# prompts:
+#   BOT_TOKEN: ....
+#   AUTHORIZED_USER: 
+
+# Bot credentials only (later):
+sudo bash wireguard-vpn.sh bot
+
+
+Telegram commands
+Command What it does
+/help /start
+Command list
+/id
+Your Telegram user id (works even if unauthorized)
+/users
+List VPN users
+/add iphone1
+Create user + QR photo + .conf file
+/show iphone1
+QR again
+/conf iphone1
+Send .conf document
+/delete iphone1
+Remove user
+/online
+Connected now (handshake ≤ 180s)
+/status
+All users ONLINE/OFFLINE
+/server
+Endpoint, peer count, wg show
+
+
+Check commands on the server
+# WireGuard
+sudo systemctl status wg-quick@wg0 --no-pager
+sudo vpn server
+sudo vpn users
+
+# Telegram bot
+sudo systemctl status vpn-telegram-bot --no-pager
+sudo journalctl -u vpn-telegram-bot -n 50 --no-pager
+sudo grep -E '^(BOT_TOKEN|AUTHORIZED_USER)=' /etc/wireguard/telegram-bot.env
+
+# CLI + bot path smoke test
+sudo vpn add testbot --no-qr
+sudo vpn status
+sudo vpn delete testbot
+
+# In Telegram (as authorized user)
+# /id
+# /help
+# /add phone1
+# /show phone1
+# /conf phone1
+# /online
+# /status
+# /server
+# /delete phone1
+
+
+
+
+
+
+
+
